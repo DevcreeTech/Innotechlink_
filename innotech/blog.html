@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - InnoTech</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-text {
+            background: linear-gradient(45deg, #4F46E5, #EC4899);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .post-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .post-card:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 transition-colors duration-300">
+    <!-- Header -->
+    <header class="fixed w-full z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="text-2xl font-bold gradient-text flex items-center">
+                    <i class="fas fa-code mr-2"></i>InnoTechLink
+                </a>
+                
+                <!-- Mobile Menu Button -->
+                <button id="menu-btn" class="lg:hidden text-gray-600 dark:text-gray-300">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden lg:flex space-x-8">
+                    <a href="blog.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition">Blog</a>
+                    <a href="documentation.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition">Documentation</a>
+                    <a href="about.html" class="text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition">About</a>
+                    <a href="chatbot.html" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">Try Chatbot</a>
+                </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="hidden lg:hidden mt-4 space-y-4">
+                <a href="blog.html" class="block text-gray-700 dark:text-gray-300">Blog</a>
+                <a href="documentation.html" class="block text-gray-700 dark:text-gray-300">Documentation</a>
+                <a href="about.html" class="block text-gray-700 dark:text-gray-300">About</a>
+                <a href="chatbot.html" class="block bg-blue-500 text-white px-4 py-2 rounded-lg">Try Chatbot</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Blog Section -->
+    <main class="container mx-auto px-4 py-24">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-8">Latest Updates</h1>
+            
+            <!-- Featured Post -->
+            <article class="post-card bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl mb-8">
+                <div class="relative h-64 rounded-lg overflow-hidden mb-6">
+                    <img src="https://source.unsplash.com/random/800x400?tech" alt="Featured post" class="w-full h-full object-cover">
+                    <span class="absolute top-4 right-4 bg-blue-500 text-white px-3 py-1 rounded-full text-sm">Featured</span>
+                </div>
+                <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-4">
+                    <span>March 15, 2023</span>
+                    <span class="mx-2">•</span>
+                    <span>8 min read</span>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">The Future of AI in Modern Businesses</h2>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">Discover how artificial intelligence is transforming industries and creating new opportunities for growth and innovation...</p>
+                <a href="#" class="inline-flex items-center text-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition">
+                    Read More
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </article>
+
+            <!-- Blog Posts Grid -->
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Post 1 -->
+                <article class="post-card bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl">
+                    <img src="https://source.unsplash.com/random/800x600?coding" alt="Post thumbnail" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+                        <span>March 10, 2023</span>
+                        <span class="mx-2">•</span>
+                        <span>5 min read</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Best Practices for Clean Code</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4">Learn essential techniques to write maintainable and efficient code that stands the test of time...</p>
+                    <a href="#" class="text-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition flex items-center">
+                        Read More
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </article>
+
+                <!-- Post 2 -->
+                <article class="post-card bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl">
+                    <img src="https://source.unsplash.com/random/800x600?startup" alt="Post thumbnail" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mb-2">
+                        <span>March 5, 2023</span>
+                        <span class="mx-2">•</span>
+                        <span>6 min read</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Building Scalable Architecture</h3>
+                    <p class="text-gray-600 dark:text-gray-300 mb-4">Discover the key principles behind creating systems that grow with your business needs...</p>
+                    <a href="#" class="text-blue-500 hover:text-blue-600 dark:hover:text-blue-400 transition flex items-center">
+                        Read More
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </a>
+                </article>
+            </div>
+
+            <!-- Pagination -->
+            <div class="flex justify-center mt-12 space-x-4">
+                <a href="#" class="px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700">Previous</a>
+                <a href="#" class="px-4 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600">1</a>
+                <a href="#" class="px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700">Next</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 dark:bg-gray-900 text-gray-300 py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h4 class="text-white font-bold mb-4">InnoTech</h4>
+                    <p class="text-sm">Empowering innovation through cutting-edge technology solutions.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="about.html" class="hover:text-blue-400 transition">About Us</a></li>
+                        <li><a href="blog.html" class="hover:text-blue-400 transition">Blog</a></li>
+                        <li><a href="documentation.html" class="hover:text-blue-400 transition">Documentation</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Legal</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:text-blue-400 transition">Privacy Policy</a></li>
+                        <li><a href="#" class="hover:text-blue-400 transition">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-bold mb-4">Connect</h4>
+                    <div class="flex space-x-4">
+                        <a href="#" class="hover:text-blue-400 transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="hover:text-blue-400 transition"><i class="fab fa-github"></i></a>
+                        <a href="#" class="hover:text-blue-400 transition"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center">
+                <p>&copy; 2023 InnoTech. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Dark Mode Toggle (if you want to add a manual toggle)
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const htmlElement = document.documentElement;
+
+        if (darkModeToggle) {
+            darkModeToggle.addEventListener('click', () => {
+                htmlElement.classList.toggle('dark');
+                localStorage.setItem('theme', htmlElement.classList.contains('dark') ? 'dark' : 'light');
+            });
+        }
+
+        // Close mobile menu on click outside
+        document.addEventListener('click', (e) => {
+            if (!menuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+                mobileMenu.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>

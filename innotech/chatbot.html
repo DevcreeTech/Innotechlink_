@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Chat Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Chat Container */
+        .chat-container {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 400px;
+            width: 90%;
+            font-family: 'Segoe UI', sans-serif;
+            transform: translateY(150%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .chat-container.active {
+            transform: translateY(0);
+        }
+
+        /* Chat Bubble Trigger */
+        .chat-bubble {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: #2563eb;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .chat-bubble:hover {
+            transform: scale(1.1);
+            background: #1d4ed8;
+        }
+
+        .chat-bubble i {
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        /* Notification Badge */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .notification-badge.active {
+            opacity: 1;
+        }
+
+        /* Chat Window */
+        .chat-window {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 500px;
+        }
+
+        /* Chat Header */
+        .chat-header {
+            background: #2563eb;
+            color: white;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .chat-header i {
+            font-size: 1.2rem;
+        }
+
+        .chat-header-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chat-header-actions i {
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .chat-header-actions i:hover {
+            color: #dbeafe;
+        }
+
+        /* Chat Body */
+        .chat-body {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            background: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        /* Messages */
+        .message {
+            max-width: 80%;
+            padding: 0.8rem;
+            border-radius: 1rem;
+            animation: messageIn 0.3s ease;
+            position: relative;
+        }
+
+        .user-message {
+            background: #2563eb;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
+        }
+
+        .bot-message {
+            background: white;
+            color: #1e293b;
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        /* Timestamp */
+        .timestamp {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            margin-top: 0.3rem;
+            text-align: right;
+        }
+
+        .bot-message .timestamp {
+            text-align: left;
+        }
+
+        /* Typing Indicator */
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.8rem;
+            background: white;
+            border-radius: 1rem;
+            border-bottom-left-radius: 5px;
+            align-self: flex-start;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .typing-indicator.active {
+            opacity: 1;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            background: #94a3b8;
+            border-radius: 50%;
+            display: inline-block;
+            animation: typing 1s infinite ease-in-out;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Quick Reply Buttons */
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .quick-reply-btn {
+            background: #dbeafe;
+            color: #2563eb;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .quick-reply-btn:hover {
+            background: #bfdbfe;
+        }
+
+        /* File Attachment */
+        .file-attachment {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: #f1f5f9;
+            border-radius: 8px;
+            margin-top: 0.5rem;
+        }
+
+        .file-attachment i {
+            color: #64748b;
+        }
+
+        .file-name {
+            font-size: 0.9rem;
+            color: #334155;
+            flex-grow: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Input Area */
+        .chat-input {
+            display: flex;
+            padding: 1rem;
+            background: white;
+            gap: 0.5rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .chat-input-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 0 0.5rem;
+        }
+
+        .chat-input-wrapper input {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            outline: none;
+        }
+
+        .chat-input-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chat-input-actions i {
+            color: #64748b;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+
+        .chat-input-actions i:hover {
+            color: #334155;
+        }
+
+        .chat-input button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .chat-input button:hover {
+            background: #1d4ed8;
+        }
+
+        /* Agent Selection */
+        .agent-selection {
+            display: flex;
+            justify-content: center;
+            padding: 0.5rem;
+            background: #f1f5f9;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .agent-option {
+            padding: 0.5rem 1rem;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .agent-option.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .agent-option:not(.active) {
+            background: #e2e8f0;
+            color: #64748b;
+        }
+
+        .agent-option:hover:not(.active) {
+            background: #cbd5e1;
+        }
+
+        /* Emoji Picker */
+        .emoji-picker {
+            position: absolute;
+            bottom: 70px;
+            right: 10px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            padding: 0.5rem;
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 0.3rem;
+            z-index: 100;
+            max-height: 200px;
+            overflow-y: auto;
+            opacity: 0;
+            transform: translateY(10px);
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .emoji-picker.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: all;
+        }
+
+        .emoji-item {
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0.3rem;
+            text-align: center;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+
+        .emoji-item:hover {
+            background: #f1f5f9;
+        }
+
+        /* Login Form */
+        .login-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .login-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .login-form {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            width: 80%;
+            max-width: 300px;
+        }
+
+        .login-form h3 {
+            margin-top: 0;
+            text-align: center;
+            color: #2563eb;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.3rem;
+            color: #64748b;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 5px;
+        }
+
+        .login-btn {
+            width: 100%;
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 0.8rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* Animations */
+        @keyframes messageIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            .chat-container {
+                width: 100%;
+                max-width: none;
+                bottom: 0;
+                right: 0;
+                border-radius: 0;
+            }
+
+            .chat-bubble {
+                bottom: 10px;
+                right: 10px;
+                width: 50px;
+                height: 50px;
+            }
+            
+            .chat-window {
+                border-radius: 0;
+                height: 100vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Chat Bubble -->
+    <div class="chat-bubble">
+        <i class="fas fa-comment-dots"></i>
+        <div class="notification-badge">1</div>
+    </div>
+
+    <!-- Chat Container -->
+    <div class="chat-container">
+        <div class="chat-window">
+            <!-- Chat Header -->
+            <div class="chat-header">
+                <div class="chat-header-left">
+                    <i class="fas fa-robot"></i>
+                    <h3>Enhanced Assistant</h3>
+                </div>
+                <div class="chat-header-actions">
+                    <i class="fas fa-user" id="loginBtn" title="Login"></i>
+                    <i class="fas fa-times" id="closeBtn" title="Close"></i>
+                </div>
+            </div>
+
+            <!-- Chat Body -->
+            <div class="chat-body" id="chatBody">
+                <!-- Bot Welcome Message -->
+                <div class="message bot-message">
+                    <p>👋 Hello! I'm your AI-powered assistant. How can I help you today?</p>
+                    <div class="timestamp">12:00 PM</div>
+                    <div class="quick-replies">
+                        <button class="quick-reply-btn">Help me with...</button>
+                        <button class="quick-reply-btn">Contact support</button>
+                        <button class="quick-reply-btn">Learn more</button>
+                    </div>
+                </div>
+                
+                <!-- Typing Indicator -->
+                <div class="typing-indicator" id="typingIndicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
+            <!-- Agent Selection -->
+            <div class="agent-selection">
+                <div class="agent-option active" data-agent="ai">
+                    <i class="fas fa-robot"></i>
+                    <span>AI Assistant</span>
+                </div>
+                <div class="agent-option" data-agent="human">
+                    <i class="fas fa-user-headset"></i>
+                    <span>Human Agent</span>
+                </div>
+            </div>
+
+            <!-- Chat Input -->
+            <div class="chat-input">
+                <div class="chat-input-wrapper">
+                    <input type="text" placeholder="Type your message..." id="userInput">
+                    <div class="chat-input-actions">
+                        <i class="fas fa-smile" id="emojiBtn" title="Emoji"></i>
+                        <i class="fas fa-paperclip" id="attachmentBtn" title="Attach file"></i>
+                        <input type="file" id="fileInput" style="display: none;">
+                        <i class="fas fa-microphone" id="voiceBtn" title="Voice input"></i>
+                    </div>
+                </div>
+                <button id="sendButton">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+
+            <!-- Emoji Picker -->
+            <div class="emoji-picker" id="emojiPicker">
+                <div class="emoji-item">😊</div>
+                <div class="emoji-item">😂</div>
+                <div class="emoji-item">🙌</div>
+                <div class="emoji-item">👍</div>
+                <div class="emoji-item">👋</div>
+                <div class="emoji-item">🎉</div>
+                <div class="emoji-item">❤️</div>
+                <div class="emoji-item">🔥</div>
+                <div class="emoji-item">🤔</div>
+                <div class="emoji-item">👀</div>
+                <div class="emoji-item">🙏</div>
+                <div class="emoji-item">✨</div>
+            </div>
+
+        
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const chatBubble = document.querySelector('.chat-bubble');
+        const notificationBadge = document.querySelector('.notification-badge');
+        const chatContainer = document.querySelector('.chat-container');
+        const chatBody = document.getElementById('chatBody');
+        const userInput = document.getElementById('userInput');
+        const sendButton = document.getElementById('sendButton');
+        const closeBtn = document.getElementById('closeBtn');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const emojiBtn = document.getElementById('emojiBtn');
+        const emojiPicker = document.getElementById('emojiPicker');
+        const emojiItems = document.querySelectorAll('.emoji-item');
+        const attachmentBtn = document.getElementById('attachmentBtn');
+        const fileInput = document.getElementById('fileInput');
+        const voiceBtn = document.getElementById('voiceBtn');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginOverlay = document.getElementById('loginOverlay');
+        const loginSubmitBtn = document.getElementById('loginSubmitBtn');
+        const agentOptions = document.querySelectorAll('.agent-option');
+
+        // Global variables
+        let chatHistory = [];
+        let currentAgent = 'ai';
+        let isLoggedIn = false;
+        let username = '';
+        let recognition = null;
+
+        // Initialize notification
+        notificationBadge.classList.add('active');
+
+        // Chat Toggle
+        chatBubble.addEventListener('click', () => {
+            chatContainer.classList.toggle('active');
+            if (chatContainer.classList.contains('active')) {
+                notificationBadge.classList.remove('active');
+            }
+        });
+
+        closeBtn.addEventListener('click', () => {
+            chatContainer.classList.remove('active');
+        });
+
+        // Send Message Function
+        function sendMessage() {
+            const userMessage = userInput.value.trim();
+            if (!userMessage) return;
+
+            // Add timestamp
+            const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            // Add user message to chat
+            addMessage(userMessage, 'user', timestamp);
+            
+            // Store in chat history
+            chatHistory.push({ sender: 'user', message: userMessage, timestamp });
+            
+            // Save to local storage
+            saveHistory();
+            
+            // Show typing indicator
+            typingIndicator.classList.add('active');
+            
+            // Handle response based on agent type
+            if (currentAgent === 'ai') {
+                // API call to ChatGPT or other AI system
+                fetchAIResponse(userMessage);
+            } else {
+                // Simulate human agent response with delay
+                setTimeout(() => {
+                    const botResponse = getHumanAgentResponse(userMessage);
+                    typingIndicator.classList.remove('active');
+                    addMessage(botResponse, 'bot', timestamp, getQuickReplies());
+                    
+                    // Store in chat history
+                    chatHistory.push({ sender: 'bot', message: botResponse, timestamp });
+                    saveHistory();
+                }, 2000);
+            }
+            
+            // Clear input
+            userInput.value = '';
+        }
+
+        // AI Response Function
+        async function fetchAIResponse(message) {
+            try {
+                // Replace with actual API call to ChatGPT or other AI service
+                // For demo purposes, we'll simulate a response
+                setTimeout(() => {
+                    const aiResponse = getAIResponse(message);
+                    const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    
+                    typingIndicator.classList.remove('active');
+                    addMessage(aiResponse, 'bot', timestamp, getQuickReplies());
+                    
+                    // Store in chat history
+                    chatHistory.push({ sender: 'bot', message: aiResponse, timestamp });
+                    saveHistory();
+                }, 1500);
+                
+                /* 
+                // This is how you would implement a real API call
+                const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer YOUR_API_KEY'
+                    },
+                    body: JSON.stringify({
+                        model: 'gpt-3.5-turbo',
+                        messages: [
+                            { role: 'system', content: 'You are a helpful assistant.' },
+                            { role: 'user', content: message }
+                        ]
+                    })
+                });
+                
+                const data = await response.json();
+                const aiResponse = data.choices[0].message.content;
+                */
+            } catch (error) {
+                console.error('Error fetching AI response:', error);
+                typingIndicator.classList.remove('active');
+                addMessage('Sorry, I encountered an error while processing your request. Please try again later.', 'bot', new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+            }
+        }
+
+        // Add Message to Chat
+        function addMessage(text, sender, timestamp, quickReplies = null) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}-message`;
+            
+            let messageContent = `<p>${text}</p>`;
+            
+            // Add timestamp
+            messageContent += `<div class="timestamp">${timestamp}</div>`;
+            
+            // Add quick replies if available
+            if (quickReplies && sender === 'bot') {
+                messageContent += `
+                    <div class="quick-replies">
+                        ${quickReplies.map(reply => `<button class="quick-reply-btn">${reply}</button>`).join('')}
+                    </div>
+                `;
+            }
+            
+            messageDiv.innerHTML = messageContent;
+            chatBody.appendChild(messageDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+            
+            // Add event listeners to quick reply buttons
+            if (quickReplies && sender === 'bot') {
+                const quickReplyButtons = messageDiv.querySelectorAll('.quick-reply-btn');
+                quickReplyButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        userInput.value = button.textContent;
+                        sendMessage();
+                    });
+                });
+            }
+        }
+
+        // Add file attachment
+        function addFileAttachment(fileName) {
+            const lastMessage = chatBody.lastElementChild;
+            
+            if (lastMessage && lastMessage.classList.contains('user-message')) {
+                const fileAttachment = document.createElement('div');
+                fileAttachment.className = 'file-attachment';
+                fileAttachment.innerHTML = `
+                    <i class="fas fa-file"></i>
+                    <span class="file-name">${fileName}</span>
+                `;
+                lastMessage.appendChild(fileAttachment);
+            }
+        }
+
+        // AI Response Logic
+        function getAIResponse(userMessage) {
+            const lowerMessage = userMessage.toLowerCase();
+            
+            if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) 
+                return '👋 Hello! How can I assist you today?';
+            
+            if (lowerMessage.includes('help')) 
+                return '🔍 I\'d be happy to help! What specifically do you need assistance with?';
+            
+            if (lowerMessage.includes('contact') || lowerMessage.includes('support')) 
+                return '📞 You can reach our support team at support@example.com or call us at (555) 123-4567.';
+            
+            if (lowerMessage.includes('thank')) 
+                return '😊 You\'re welcome! Is there anything else I can help you with today?';
+            
+            if (lowerMessage.includes('feature') || lowerMessage.includes('can you')) 
+                return 'I can help with product information, troubleshooting, account questions, and more. What would you like to know?';
+            
+            if (lowerMessage.includes('price') || lowerMessage.includes('cost')) 
+                return '💰 Our pricing starts at $9.99/month for the basic plan. Would you like me to provide more details about our pricing options?';
+            
+            if (lowerMessage.includes('login') || lowerMessage.includes('account')) 
+                return '🔐 You can manage your account by clicking the login button at the top of this chat window. Need help with your account?';
+            
+            return '🤔 I\'m not sure I understand. Could you please provide more details or rephrase your question?';
+        }
+
+        // Human Agent Response Logic
+        function getHumanAgentResponse(userMessage) {
+            const lowerMessage = userMessage.toLowerCase();
+            
+            if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) 
+                return 'Hello! My name is Alex, and I\'ll be your customer support agent today. How can I help you?';
+            
+            if (lowerMessage.includes('help')) 
+                return 'I\'d be happy to help you with that. Could you please provide more details about your issue?';
+            
+            if (lowerMessage.includes('contact') || lowerMessage.includes('support')) 
+                return 'You can reach our support team 24/7 at support@example.com or call us at (555) 123-4567. I can also help you right now if you\'d like.';
+            
+            if (lowerMessage.includes('thank')) 
+                return 'You\'re welcome! I\'m glad I could help. Is there anything else you need assistance with today?';
+            
+            return 'I\'m looking into this for you. To better assist you, could you please provide more information about your request?';
+        }
+
+        // Quick Replies
+        function getQuickReplies() {
+            const replies = [
+                'How does this work?',
+                'I need help with my account',
+                'What are the pricing options?',
+                'Contact support'
+            ];
+            
+            // Return 2-3 random replies
+            return replies.sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * 2) + 2);
+        }
+
+        // Save Chat History
+        function saveHistory() {
+            if (isLoggedIn) {
+                localStorage.setItem(`chatHistory_${username}`, JSON.stringify(chatHistory));
+            }
+        }
+
+        // Load Chat History
+        function loadHistory() {
+            if (isLoggedIn) {
+                const savedHistory = localStorage.getItem(`chatHistory_${username}`);
+                
+                if (savedHistory) {
+                    chatHistory = JSON.parse(savedHistory);
+                    
+                    // Clear chat body except for welcome message
+                    while (chatBody.childNodes.length > 2) {
+                        chatBody.removeChild(chatBody.lastChild);
+                    }
+                    
+                    // Add messages from history
+                    chatHistory.forEach(item => {
+                        addMessage(item.message, item.sender, item.timestamp);
+                    });
+                }
+            }
+        }
+
+        // Toggle Emoji Picker
+        emojiBtn.addEventListener('click', () => {
+            emojiPicker.classList.toggle('active');
+        });
+
+        // Add Emoji to Input
+        emojiItems.forEach(emoji => {
+            emoji.addEventListener('click', () => {
+                userInput.value += emoji.textContent;
+                emojiPicker.classList.remove('active');
+                userInput.focus();
+            });
+        });
+
+        // File Attachment
+        attachmentBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                const file = e.target.files[0];
+                const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                
+                // Add user message
+                addMessage('I\'ve attached a file', 'user', timestamp);
+                
+                // Add file attachment
+                addFileAttachment(file.name);
+                
+                // Show typing indicator
+                typingIndicator.classList.add('active');
+                
+                // Simulate response
+                setTimeout(() => {
+                    typingIndicator.classList.remove('active');
+                    addMessage(`I've received your file: ${file.name}. I'll review it and get back to you shortly.`, 'bot', timestamp);
+                }, 1500);
+            }
+        });
+
+        // Voice Input
+        voiceBtn.addEventListener('click', () => {
+            // Check if browser supports speech recognition
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                recognition = new SpeechRecognition();
+                
+                recognition.lang = 'en-US';
+                recognition.interimResults = false;
+                
+                recognition.onstart = () => {
+                    voiceBtn.classList.add('active');
+                    voiceBtn.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+                };
+                
+                recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript;
+                    userInput.value = transcript;
+                };
+                
+                recognition.onend = () => {
+                    voiceBtn.classList.remove('active');
+                    voiceBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+                };
+                
+                recognition.start();
+            } else {
+                alert('Speech recognition is not supported in your browser.');
+            }
+        });
+
+              // Login Functionality
+              loginBtn.addEventListener('click', () => {
+            loginOverlay.classList.add('active');
+        });
+
+        loginSubmitBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const usernameInput = document.getElementById('username').value.trim();
+            const passwordInput = document.getElementById('password').value.trim();
+
+            // Simple validation
+            if (!usernameInput || !passwordInput) {
+                alert('Please enter both username and password.');
+                return;
+            }
+
+            // Demo credentials (replace with real authentication)
+            if (usernameInput === 'user' && passwordInput === 'pass') {
+                isLoggedIn = true;
+                username = usernameInput;
+                loginOverlay.classList.remove('active');
+                loadHistory();
+                loginBtn.classList.add('logged-in');
+                loginBtn.innerHTML = '<i class="fas fa-user-check"></i>';
+                addMessage(`Welcome back, ${username}!`, 'bot', new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+            } else {
+                alert('Invalid credentials. Please try again.');
+            }
+        });
+
+        // Agent Selection
+        agentOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                if (option.classList.contains('active')) return;
+                
+                agentOptions.forEach(opt => opt.classList.remove('active'));
+                option.classList.add('active');
+                currentAgent = option.dataset.agent;
+                
+                // Add system message
+                const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const agentName = currentAgent === 'ai' ? 'AI Assistant' : 'Human Agent';
+                addMessage(`Switched to ${agentName}`, 'system', timestamp);
+            });
+        });
+
+        // Send Message Events
+        sendButton.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // Close Emoji Picker when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!emojiBtn.contains(e.target) && !emojiPicker.contains(e.target)) {
+                emojiPicker.classList.remove('active');
+            }
+        });
+
+        // Initialize chat history
+        loadHistory();
+    </script>
+</body>
+</html>

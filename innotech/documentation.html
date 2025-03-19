@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - InnoTech</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+</head>
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+   
+<body class="bg-white dark:bg-[#0A0A0F] transition-colors duration-300">
+    <!-- Header -->
+   <header class="fixed w-full z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md">
+    <nav class="container mx-auto px-6 py-4">
+        <div class="flex justify-between items-center">
+            <div class="text-2xl font-bold gradient-text flex items-center">
+               <a href="index.html"> <i class="fas fa-code text-blue-500 mr-2"></i>InnoTechLink</a>
+            </div>
+                
+                <!-- Mobile menu button -->
+                <button id="mobile-menu-button" class="md:hidden flex items-center">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+                
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:block">
+                    <ul class="flex space-x-6">
+                        <li><a href="index.html" class="hover:text-primary-200 transition-colors duration-200">Home</a></li>
+                        <li><a href="faq.html" class="hover:text-primary-200 transition-colors duration-200">FAQ</a></li>
+                        <li><a href="about.html" class="hover:text-primary-200 transition-colors duration-200">About</a></li>
+                        <li><a href="documentation.html" class="font-medium border-b-2 border-white hover:text-primary-200 transition-colors duration-200">Documentation</a></li>
+                        <li><a href="chatbot.html" class="hover:text-primary-200 transition-colors duration-200">Chatbot</a></li>
+                    </ul>
+                </nav>
+            </div>
+            
+            <!-- Mobile Navigation -->
+            <nav id="mobile-menu" class="hidden md:hidden mt-4">
+                <ul class="flex flex-col space-y-2">
+                    <li><a href="index.html" class="block py-2 hover:bg-primary-600 px-3 rounded">Home</a></li>
+                    <li><a href="faq.html" class="block py-2 hover:bg-primary-600 px-3 rounded">FAQ</a></li>
+                    <li><a href="about.html" class="block py-2 hover:bg-primary-600 px-3 rounded">About</a></li>
+                    <li><a href="documentation.html" class="block py-2 bg-primary-600 px-3 rounded font-medium">Documentation</a></li>
+                    <li><a href="chatbot.html" class="block py-2 hover:bg-primary-600 px-3 rounded">Chatbot</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <div class="bg-primary-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Documentation</h1>
+            <p class="text-lg md:text-xl max-w-2xl mb-6">Everything you need to know about using InnoTech's platform and tools, all in one place.</p>
+            <div class="relative max-w-md">
+                <input type="text" placeholder="Search documentation..." class="w-full px-4 py-2 rounded-lg text-gray-800 border-none focus:ring-2 focus:ring-primary-500">
+                <button class="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Documentation Section -->
+    <main class="container mx-auto px-4 py-8 flex-grow">
+        <div class="flex flex-col md:flex-row gap-8">
+            <!-- Sidebar Navigation -->
+            <aside class="md:w-64 flex-shrink-0">
+                <div class="bg-white rounded-lg shadow-md p-4 sticky top-24">
+                    <h3 class="text-lg font-semibold mb-4 text-primary-700">Documentation</h3>
+                    <nav>
+                        <ul class="space-y-2">
+                            <li class="border-l-4 border-primary-500 pl-3">
+                                <a href="#getting-started" class="block text-primary-700 font-medium">Getting Started</a>
+                            </li>
+                            <li class="border-l-4 border-transparent hover:border-primary-300 pl-3">
+                                <a href="#user-guides" class="block hover:text-primary-700">User Guides</a>
+                            </li>
+                            <li class="border-l-4 border-transparent hover:border-primary-300 pl-3">
+                                <a href="#api-reference" class="block hover:text-primary-700">API Reference</a>
+                            </li>
+                            <li class="border-l-4 border-transparent hover:border-primary-300 pl-3">
+                                <a href="#tutorials" class="block hover:text-primary-700">Tutorials</a>
+                            </li>
+                            <li class="border-l-4 border-transparent hover:border-primary-300 pl-3">
+                                <a href="#faqs" class="block hover:text-primary-700">FAQs</a>
+                            </li>
+                            <li class="border-l-4 border-transparent hover:border-primary-300 pl-3">
+                                <a href="#troubleshooting" class="block hover:text-primary-700">Troubleshooting</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <div class="flex-grow">
+                <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                    <h2 id="getting-started" class="text-3xl font-bold mb-4 text-primary-800 flex items-center">
+                        <i class="fas fa-rocket mr-3 text-primary-600"></i>
+                        Getting Started
+                    </h2>
+                    <p class="text-gray-700 mb-6">Learn how to get started with InnoTech by following our step-by-step guide.</p>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
+                            <h4 class="font-semibold text-lg mb-2">Installation Guide</h4>
+                            <p class="text-gray-600 mb-3">Follow these steps to install the InnoTech platform on your system.</p>
+                            <a href="#" class="text-primary-600 hover:text-primary-800 flex items-center">
+                                Read more <i class="fas fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 hover:shadow-md transition-shadow">
+                            <h4 class="font-semibold text-lg mb-2">Quick Start</h4>
+                            <p class="text-gray-600 mb-3">A condensed guide to help you start using InnoTech right away.</p>
+                            <a href="#" class="text-primary-600 hover:text-primary-800 flex items-center">
+                                Read more <i class="fas fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                    <h2 id="user-guides" class="text-3xl font-bold mb-4 text-primary-800 flex items-center">
+                        <i class="fas fa-book mr-3 text-primary-600"></i>
+                        User Guides
+                    </h2>
+                    <p class="text-gray-700 mb-6">Explore our comprehensive user guides for detailed instructions on using various features of the platform.</p>
+                    
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="flex flex-col border rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+                            <div class="bg-gray-100 text-center py-6">
+                                <i class="fas fa-cogs text-4xl text-primary-600"></i>
+                            </div>
+                            <div class="p-4">
+                                <h4 class="font-semibold text-lg mb-2">Platform Configuration</h4>
+                                <p class="text-gray-600 text-sm mb-3">Learn how to configure the platform to match your requirements.</p>
+                                <a href="#" class="text-primary-600 hover:text-primary-800 mt-auto inline-block">View Guide</a>
+                            </div>
+                        </div>
+                        <div class="flex flex-col border rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+                            <div class="bg-gray-100 text-center py-6">
+                                <i class="fas fa-users text-4xl text-primary-600"></i>
+                            </div>
+                            <div class="p-4">
+                                <h4 class="font-semibold text-lg mb-2">User Management</h4>
+                                <p class="text-gray-600 text-sm mb-3">Manage users, roles, and permissions within your organization.</p>
+                                <a href="#" class="text-primary-600 hover:text-primary-800 mt-auto inline-block">View Guide</a>
+                            </div>
+                        </div>
+                        <div class="flex flex-col border rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+                            <div class="bg-gray-100 text-center py-6">
+                                <i class="fas fa-chart-line text-4xl text-primary-600"></i>
+                            </div>
+                            <div class="p-4">
+                                <h4 class="font-semibold text-lg mb-2">Analytics Dashboard</h4>
+                                <p class="text-gray-600 text-sm mb-3">Get insights from your data with our powerful analytics tools.</p>
+                                <a href="#" class="text-primary-600 hover:text-primary-800 mt-auto inline-block">View Guide</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                    <h2 id="faqs" class="text-3xl font-bold mb-4 text-primary-800 flex items-center">
+                        <i class="fas fa-question-circle mr-3 text-primary-600"></i>
+                        FAQs
+                    </h2>
+                    <p class="text-gray-700 mb-6">Check out our FAQ section for answers to common questions.</p>
+                    
+                    <div class="divide-y">
+                        <div class="py-4">
+                            <h4 class="font-semibold text-lg mb-2 cursor-pointer hover:text-primary-700 flex justify-between items-center">
+                                How do I reset my password?
+                                <i class="fas fa-chevron-down text-gray-400"></i>
+                            </h4>
+                            <p class="text-gray-600 hidden">To reset your password, click on the "Forgot Password" link on the login page and follow the instructions sent to your email.</p>
+                        </div>
+                        <div class="py-4">
+                            <h4 class="font-semibold text-lg mb-2 cursor-pointer hover:text-primary-700 flex justify-between items-center">
+                                Can I use InnoTech on mobile devices?
+                                <i class="fas fa-chevron-down text-gray-400"></i>
+                            </h4>
+                            <p class="text-gray-600 hidden">Yes, InnoTech is fully responsive and works on all mobile devices with a modern web browser.</p>
+                        </div>
+                        <div class="py-4">
+                            <h4 class="font-semibold text-lg mb-2 cursor-pointer hover:text-primary-700 flex justify-between items-center">
+                                How do I upgrade my subscription?
+                                <i class="fas fa-chevron-down text-gray-400"></i>
+                            </h4>
+                            <p class="text-gray-600 hidden">To upgrade your subscription, go to Account Settings > Subscription and select your desired plan.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 text-center">
+                        <a href="faq.html" class="inline-block bg-primary-600 hover:bg-primary-700 text-white font-medium py-2 px-6 rounded-lg transition-colors">
+                            View All FAQs
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Call to Action -->
+    <section class="bg-primary-700 text-white py-12">
+        <div class="container mx-auto px-4 text-center">
+            <h3 class="text-2xl md:text-3xl font-bold mb-4">Need Additional Help?</h3>
+            <p class="mb-6 max-w-2xl mx-auto">Our support team is available 24/7 to assist you with any questions or issues you may have.</p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#" class="bg-white text-primary-700 hover:bg-gray-100 font-medium py-3 px-6 rounded-lg transition-colors inline-flex items-center justify-center">
+                    <i class="fas fa-headset mr-2"></i> Contact Support
+                </a>
+                <a href="#" class="bg-transparent border border-white hover:bg-primary-600 font-medium py-3 px-6 rounded-lg transition-colors inline-flex items-center justify-center">
+                    <i class="fas fa-comments mr-2"></i> Join Community
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <h4 class="text-xl font-bold mb-4 flex items-center">
+                        <i class="fas fa-microchip mr-2"></i> InnoTech
+                    </h4>
+                    <p class="text-gray-400">Empowering innovation through technology solutions that drive business forward.</p>
+                    <div class="mt-4 flex space-x-3">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white">Home</a></li>
+                        <li><a href="about.html" class="text-gray-400 hover:text-white">About</a></li>
+                        <li><a href="documentation.html" class="text-white">Documentation</a></li>
+                        <li><a href="faq.html" class="text-gray-400 hover:text-white">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Resources</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Blog</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Tutorials</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Case Studies</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Webinars</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contact</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li class="flex items-start"><i class="fas fa-map-marker-alt mt-1 mr-2"></i> 123 Tech Street, San Francisco, CA</li>
+                        <li class="flex items-center"><i class="fas fa-envelope mr-2"></i> info@innotech.com</li>
+                        <li class="flex items-center"><i class="fas fa-phone mr-2"></i> (555) 123-4567</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-6 text-center text-gray-400">
+                <p>&copy; 2025 InnoTech. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // FAQ accordion functionality
+        document.querySelectorAll('.py-4 h4').forEach(item => {
+            item.addEventListener('click', event => {
+                const content = item.nextElementSibling;
+                content.classList.toggle('hidden');
+                
+                // Toggle icon
+                const icon = item.querySelector('i');
+                icon.classList.toggle('fa-chevron-down');
+                icon.classList.toggle('fa-chevron-up');
+            });
+        });
+    </script>
+</body>
+</html>
